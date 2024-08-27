@@ -1,0 +1,103 @@
+:root {
+  --green: #4faf4f;
+}
+.green-color {
+  color: var(--green);
+}
+.bg-green-color {
+  background-color: var(--green);
+  color: white !important;
+}
+ul {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: black;
+  transition: 0.3s;
+}
+#login,
+#register {
+  border: 1px solid #777;
+  color: #777;
+}
+#forget-pass:hover {
+  color: var(--green) !important;
+}
+nav ul li .active {
+  font-weight: 600;
+  color: #626262 !important;
+}
+
+.loader {
+  width: 50px;
+  --b: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 1px;
+  background: conic-gradient(#0000 10%, #4faf4f) content-box;
+  -webkit-mask: repeating-conic-gradient(
+      #0000 0deg,
+      #000 1deg 20deg,
+      #0000 21deg 36deg
+    ),
+    radial-gradient(
+      farthest-side,
+      #0000 calc(100% - var(--b) - 1px),
+      #000 calc(100% - var(--b))
+    );
+  -webkit-mask-composite: destination-in;
+  mask-composite: intersect;
+  animation: l4 1s infinite steps(10);
+}
+@keyframes l4 {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.spinneer {
+  position: fixed;
+  inset: 0;
+  background-color: #ffffffdb;
+  z-index: 300;
+}
+
+.card {
+  transition: all 0.3s;
+  overflow: hidden;
+}
+.card:hover {
+  -webkit-box-shadow: 0px 3px 13px -4px rgba(79, 175, 79, 1);
+  -moz-box-shadow: 0px 3px 13px -4px rgba(79, 175, 79, 1);
+  box-shadow: 0px 3px 13px -4px rgba(79, 175, 79, 1);
+}
+.card:hover .btn {
+  opacity: 1;
+  bottom: 10px;
+}
+.add-to-cart {
+  position: absolute;
+  transform: translateX(-50%);
+  bottom: -7%;
+  transition: all 0.3s;
+  z-index: 100;
+  opacity: 0;
+}
+.btn:hover {
+  background-color: hsl(120, 38%, 40%);
+}
+.btn-remove{
+  cursor: pointer;
+  transition: all 0.5s;
+}
+.btn-remove:hover{
+  background-color: rgba(246, 112, 112, 0.167);
+}
+
+.wishlist-red-heart{
+  color: rgb(239, 34, 34);
+}
+.wishlist-heart{
+  cursor: pointer;
+}

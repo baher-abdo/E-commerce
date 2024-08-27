@@ -1,0 +1,6 @@
+nav ul li a{
+    color: #777 !important;
+}
+nav ul li a .active{
+    color: #7bff00 !important;
+}
