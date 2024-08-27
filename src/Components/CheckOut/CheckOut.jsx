@@ -26,7 +26,7 @@ export default function CheckOut() {
       city: "",
     },
     validationSchema: validationSchema,
-    onSubmit: () => handleCheckOut(cartId, "http://localhost:5173"),
+    onSubmit: () => handleCheckOut(cartId, "https://e-commerce-baher.vercel.app/"),
   });
 
   async function handleCheckOut(cartId, url) {

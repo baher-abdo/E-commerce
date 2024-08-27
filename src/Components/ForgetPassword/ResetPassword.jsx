@@ -20,7 +20,7 @@ export default function ResetPassword() {
       .then((response) => {
         setloader(false);
         if (response.statusText == "OK") {
-          // localStorage.setItem("userToken", response.data.token);
+          localStorage.setItem("userToken", response.data.token);
           setUserLogin(response.data.token);
           toast.custom(
             <div
@@ -31,7 +31,7 @@ export default function ResetPassword() {
               <p className="m-0">your password has been changed</p>
             </div>
           );
-          navigate("/login");
+          navigate("/");
         }
       })
       .catch((response) => {
