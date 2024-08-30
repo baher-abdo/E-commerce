@@ -1,5 +1,5 @@
 import style from "./Login.module.css";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";

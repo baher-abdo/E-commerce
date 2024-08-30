@@ -30,20 +30,15 @@ export default function WishList() {
     setLoading(true);
     setCurentId(id);
 
-    const res = await addProductToCart(id);
-    if (res.data.status == "success") {
+    const response = await addProductToCart(id);
+    if (response.data.status == "success") {
       setLoading(false);
-      setCartItems(cartItems + 1);
+      setCartItems(response.data.numOfCartItems);
       removeWishlistItems(id);
-      toast.custom(
-        <div
-          className="w-50 text-center position-absolute top-0 start-50 translate-middle-x mt-5 alert alert-success text-success"
-          role="alert"
-        >
-          <i className="fa-solid fa-check me-2 m-0 fw-bold"></i>
-          {res.data.message}
-        </div>
-      );
+      toast.success(response.data.message,{
+        style: { backgroundColor:"#4b974be0",color:"#ffff",},
+        duration: 3000,
+      })
     } else {
       toast.error(response.data.message);
       setLoading(false);

@@ -12,7 +12,7 @@ export default function Notfound() {
             <div className="col-md-12 text-center">
               <img
                 className="img-fluid"
-                width="450px"
+                width="400px"
                 src={ErrorPage}
                 alt="Error-Page"
               />

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,15 +22,10 @@ export default function ResetPassword() {
         if (response.statusText == "OK") {
           localStorage.setItem("userToken", response.data.token);
           setUserLogin(response.data.token);
-          toast.custom(
-            <div
-              className="position-absolute d-flex align-items-center top-0 start-50 translate-middle-x mt-5 alert alert-success text-success"
-              role="alert"
-            >
-              <i className="fa-solid fa-check me-2 m-0 fw-bold"></i>
-              <p className="m-0">your password has been changed</p>
-            </div>
-          );
+          toast.success("your password has been reset",{
+            style: { backgroundColor:"#4b974be0",color:"#ffff",},
+            duration: 3000,
+          })
           navigate("/");
         }
       })

@@ -43,15 +43,10 @@ export default function ProductDetails() {
     let response = await AddProductToWishlist(id);
     if (response.data.status == "success") {
       setProductsInWishList(response.data.data);
-      toast.custom(
-        <div
-          className="w-50 text-center position-absolute top-0 start-50 translate-middle-x mt-5 alert alert-success text-success"
-          role="alert"
-        >
-          <i className="fa-solid fa-check me-2 m-0 fw-bold"></i>
-          {response.data.message}
-        </div>
-      );
+      toast.success(response.data.message,{
+        style: { backgroundColor:"#4b974be0",color:"#ffff",},
+        duration: 3000,
+      })
     }
   }
   async function removeFromWishList(id) {
@@ -62,18 +57,13 @@ export default function ProductDetails() {
     setLoading(true);
     setCurentId(id);
 
-    let res = await addProductToCart(id);
-    if (res.data.status == "success") {
-      setCartItems(cartItems + 1);
-      toast.custom(
-        <div
-          className="w-50 text-center position-absolute top-0 start-50 translate-middle-x mt-5 alert alert-success text-success"
-          role="alert"
-        >
-          <i className="fa-solid fa-check me-2 m-0 fw-bold"></i>
-          {res.data.message}
-        </div>
-      );
+    let response = await addProductToCart(id);
+    if (response.data.status == "success") {
+      setCartItems(response.data.numOfCartItems);
+      toast.success(response.data.message,{
+        style: { backgroundColor:"#4b974be0",color:"#ffff",},
+        duration: 3000,
+      })
       setLoading(false);
     } else {
       toast.error(response.data.message);

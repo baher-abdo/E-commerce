@@ -20,8 +20,8 @@ export default function Register() {
       .then((response) => {
         setloader(false);
         if (response.data.message == "success") {
-          localStorage.setItem("userToken", response.data.token);
-          setUserLogin(response.data.token);
+          // localStorage.setItem("userToken", response.data.token);
+          // setUserLogin(response.data.token);
           navigate("/login");
         }
       })
