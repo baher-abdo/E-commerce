@@ -44,7 +44,7 @@ export default function Login() {
 
   let formik = useFormik({
     initialValues: {
-      email: "",
+      email: "baherabdo1995@gmail.com",
       password: "",
     },
     validationSchema: validationSchema,
@@ -75,6 +75,7 @@ export default function Login() {
               value={formik.values.email}
               name="email"
               type="email"
+              placeholder="Enter your email"
               className="form-control"
               id="email1"
               aria-describedby="emailHelp"
@@ -95,6 +96,7 @@ export default function Login() {
               value={formik.values.password}
               name="password"
               type="password"
+              placeholder="Password is baher@123"
               className="form-control"
               id="password1"
             />
