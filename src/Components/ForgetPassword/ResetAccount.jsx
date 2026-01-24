@@ -4,8 +4,8 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
-export default function ResetAccount() {
-  document.title = "Reset Account";
+export default function ResetAccount({ isModal, onSuccess, onBack }) {
+  if (!isModal) document.title = "Reset Account";
   let navigate = useNavigate();
   let [ApiError, setApiError] = useState("");
   let [loader, setloader] = useState(false);
@@ -19,7 +19,11 @@ export default function ResetAccount() {
       )
       .then((response) => {
         setloader(false);
-        navigate("/resetpassword");
+        if (isModal && onSuccess) {
+          onSuccess();
+        } else {
+          navigate("/resetpassword");
+        }
       })
       .catch((response) => {
         setloader(false);
@@ -46,7 +50,18 @@ export default function ResetAccount() {
             <div className="loader"></div>
           </div>
         ) : null}
-        <h2>reset your account password</h2>
+        {isModal && onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="btn btn-link p-0 fw-medium fs-6 text-muted bg-transparent text-decoration-underline mb-3"
+          >
+            <i className="fa-solid fa-arrow-left me-2"></i>
+            Back to Login
+          </button>
+        )}
+        <h2 className={isModal ? "d-none" : ""}>reset your account password</h2>
+        {isModal && <h5 className="mb-3">Enter Verification Code</h5>}
         {ApiError == "" ? null : (
           <div className="alert alert-danger p-2 text-center" role="alert">
             {ApiError}

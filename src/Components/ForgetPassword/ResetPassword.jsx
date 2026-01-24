@@ -5,13 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { UserContext } from "../../Context/UserContext";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function ResetPassword() {
-  document.title = "Reset Password";
+export default function ResetPassword({ isModal, onSuccess, onBack }) {
+  if (!isModal) document.title = "Reset Password";
   let navigate = useNavigate();
   let [ApiError, setApiError] = useState("");
   let [loader, setloader] = useState(false);
   let { setUserLogin } = useContext(UserContext);
+  const queryClient = useQueryClient();
 
   function handleLogin(values) {
     setloader(true);
@@ -22,11 +24,20 @@ export default function ResetPassword() {
         if (response.statusText == "OK") {
           localStorage.setItem("userToken", response.data.token);
           setUserLogin(response.data.token);
+          
+          // Invalidate queries to refresh cart/wishlist
+          queryClient.invalidateQueries();
+          
           toast.success("your password has been reset",{
             style: { backgroundColor:"#4b974be0",color:"#ffff",},
             duration: 3000,
-          })
-          navigate("/");
+          });
+          
+          if (isModal && onSuccess) {
+            onSuccess();
+          } else {
+            navigate("/");
+          }
         }
       })
       .catch((response) => {
@@ -63,7 +74,18 @@ export default function ResetPassword() {
             <div className="loader"></div>
           </div>
         ) : null}
-        <h2>reset your account password</h2>
+        {isModal && onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="btn btn-link p-0 fw-medium fs-6 text-muted bg-transparent text-decoration-underline mb-3"
+          >
+            <i className="fa-solid fa-arrow-left me-2"></i>
+            Back to Login
+          </button>
+        )}
+        <h2 className={isModal ? "d-none" : ""}>reset your account password</h2>
+        {isModal && <h5 className="mb-3">Set New Password</h5>}
         {ApiError == "" ? null : (
           <div className="alert alert-danger p-2 text-center" role="alert">
             {ApiError}

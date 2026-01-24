@@ -5,13 +5,18 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { UserContext } from "../../Context/UserContext";
+import { AuthModalContext } from "../../Context/AuthModalContext";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function Login() {
-  document.title = "Login";
+export default function Login({ isModal, onForgetPassword }) {
+  if (!isModal) document.title = "Login";
   let navigate = useNavigate();
   let [ApiError, setApiError] = useState("");
   let [loader, setloader] = useState(false);
   let { setUserLogin } = useContext(UserContext);
+  const { closeModal, onLoginSuccess } = useContext(AuthModalContext);
+  const queryClient = useQueryClient();
+
   function handleLogin(values) {
     setloader(true);
     axios
@@ -21,12 +26,27 @@ export default function Login() {
         if (response.data.message == "success") {
           localStorage.setItem("userToken", response.data.token);
           setUserLogin(response.data.token);
-          navigate("/");
+          
+          // Invalidate queries to refresh cart/wishlist
+          queryClient.invalidateQueries();
+          
+          if (isModal) {
+            // Execute callback first if exists
+            if (typeof onLoginSuccess === 'function') {
+               onLoginSuccess();
+            }
+            // Close modal after a brief delay to ensure state updates
+            setTimeout(() => {
+              closeModal();
+            }, 100);
+          } else {
+            navigate("/");
+          }
         }
       })
       .catch((response) => {
         setloader(false);
-        setApiError(response.response.data.message);
+        setApiError(response.response?.data?.message || "An error occurred");
       });
   }
 
@@ -44,7 +64,7 @@ export default function Login() {
 
   let formik = useFormik({
     initialValues: {
-      email: "baherabdo1995@gmail.com",
+      email: "guest14@gmail.com",
       password: "",
     },
     validationSchema: validationSchema,
@@ -58,7 +78,7 @@ export default function Login() {
             <div className="loader"></div>
           </div>
         ) : null}
-        <h2>login now</h2>
+        <h2 className={isModal ? "d-none" : ""}>login now</h2>
         {ApiError == "" ? null : (
           <div className="alert alert-danger p-2 text-center" role="alert">
             {ApiError}
@@ -96,7 +116,7 @@ export default function Login() {
               value={formik.values.password}
               name="password"
               type="password"
-              placeholder="Password is baher@123"
+              placeholder="Password is guest@123"
               className="form-control"
               id="password1"
             />
@@ -107,13 +127,23 @@ export default function Login() {
             </div>
           ) : null}
           <div className="bm-3 d-flex justify-content-between">
-            <Link
-              to="/forget-password"
-              id="forget-pass"
-              className="fw-medium fs-5"
-            >
-              forget your password ?
-            </Link>
+            {isModal ? (
+              <button
+                type="button"
+                onClick={onForgetPassword}
+                className="btn btn-link p-0 fw-medium fs-6 text-muted bg-transparent text-decoration-underline"
+              >
+                forget your password ?
+              </button>
+            ) : (
+              <Link
+                to="/forget-password"
+                id="forget-pass"
+                className="fw-medium fs-5"
+              >
+                forget your password ?
+              </Link>
+            )}
             <button
               type="submit"
               id="login"

@@ -5,8 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { UserContext } from "../../Context/UserContext";
 
-export default function ForgetPassword() {
-  document.title = "Forget Passwrod";
+export default function ForgetPassword({ isModal, onSuccess, onBack }) {
+  if (!isModal) document.title = "Forget Passwrod";
   let navigate = useNavigate();
   let [ApiError, setApiError] = useState("");
   let [loader, setloader] = useState(false);
@@ -21,7 +21,11 @@ export default function ForgetPassword() {
       .then((response) => {
         setloader(false);
         if (response.data.statusMsg == "success") {
-          navigate("/resetaccount");
+          if (isModal && onSuccess) {
+            onSuccess();
+          } else {
+            navigate("/resetaccount");
+          }
         }
       })
       .catch((response) => {
@@ -51,7 +55,18 @@ export default function ForgetPassword() {
             <div className="loader"></div>
           </div>
         ) : null}
-        <h2>please enter your Email code</h2>
+        {isModal && onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="btn btn-link p-0 fw-medium fs-6 text-muted bg-transparent text-decoration-underline mb-3"
+          >
+            <i className="fa-solid fa-arrow-left me-2"></i>
+            Back to Login
+          </button>
+        )}
+        <h2 className={isModal ? "d-none" : ""}>please enter your Email code</h2>
+        {isModal && <h5 className="mb-3">Forgot Password?</h5>}
         {ApiError == "" ? null : (
           <div className="alert alert-danger p-2 text-center" role="alert">
             {ApiError}

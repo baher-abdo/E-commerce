@@ -21,7 +21,8 @@ import WishListProvider from "./Context/WishListContext";
 import ForgetPassword from "./Components/ForgetPassword/ForgetPassword";
 import ResetAccount from "./Components/ForgetPassword/ResetAccount";
 import ResetPassword from "./Components/ForgetPassword/ResetPassword";
-import { useEffect, useState } from "react";
+import AuthModalContextProvider from "./Context/AuthModalContext";
+import AuthModal from "./Components/AuthModal/AuthModal";
 
 let query = new QueryClient();
 
@@ -32,11 +33,7 @@ let x = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        ),
+        element: <Home />,
       },
       {
         path: "cart",
@@ -56,11 +53,7 @@ let x = createBrowserRouter([
       },
       {
         path: "brands",
-        element: (
-          <ProtectedRoute>
-            <Brands />
-          </ProtectedRoute>
-        ),
+        element: <Brands />,
       },
       {
         path: "allorders",
@@ -72,11 +65,7 @@ let x = createBrowserRouter([
       },
       {
         path: "productdetails/:id",
-        element: (
-          <ProtectedRoute>
-            <ProductDetails />
-          </ProtectedRoute>
-        ),
+        element: <ProductDetails />,
       },
       { path: "register", element: <Register /> },
       { path: "login", element: <Login /> },
@@ -85,11 +74,7 @@ let x = createBrowserRouter([
       { path: "resetpassword", element: <ResetPassword /> },
       {
         path: "categories",
-        element: (
-          <ProtectedRoute>
-            <Categories />
-          </ProtectedRoute>
-        ),
+        element: <Categories />,
       },
       {
         path: "checkout",
@@ -101,11 +86,7 @@ let x = createBrowserRouter([
       },
       {
         path: "products",
-        element: (
-          <ProtectedRoute>
-            <Products />
-          </ProtectedRoute>
-        ),
+        element: <Products />,
       },
       { path: "*", element: <Notfound /> },
     ],
@@ -113,19 +94,19 @@ let x = createBrowserRouter([
 ]);
 
 function App() {
-  const [checkStatus, setcheckStatus] = useState(true);
-
   return (
     <>
       <UserContextProvider>
-        <WishListProvider>
-          <QueryClientProvider client={query}>
-            <CartContextProvider>
-              <RouterProvider router={x}></RouterProvider>
-              <Toaster />
-            </CartContextProvider>
-          </QueryClientProvider>
-        </WishListProvider>
+        <AuthModalContextProvider>
+          <WishListProvider>
+            <QueryClientProvider client={query}>
+              <CartContextProvider>
+                <RouterProvider router={x}></RouterProvider>
+                <Toaster />
+              </CartContextProvider>
+            </QueryClientProvider>
+          </WishListProvider>
+        </AuthModalContextProvider>
       </UserContextProvider>
     </>
   );
