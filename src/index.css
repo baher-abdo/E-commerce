@@ -101,3 +101,37 @@ nav ul li .active {
 .wishlist-heart{
   cursor: pointer;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.pagination .page-link {
+  color: var(--green);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+
+.pagination .page-link:focus {
+  box-shadow: 0 0 0 0.25rem rgba(79, 175, 79, 0.25);
+}
+
+
+.btn {
+  transition: all 0.3s ease; 
+}
+
+.btn.bg-green-color:hover {
+  filter: brightness(1.1); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn.text-muted:hover {
+  color: #28a745; 
+  background-color: #e6f4ea;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}

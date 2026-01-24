@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { UserContext } from "../../Context/UserContext";
 
-export default function Register() {
-  document.title = "Register";
+export default function Register({ isModal, setIsLoginTab }) {
+  if (!isModal) document.title = "Register";
   let navigate = useNavigate();
   let [ApiError, setApiError] = useState("");
   let [loader, setloader] = useState(false);
@@ -20,14 +20,16 @@ export default function Register() {
       .then((response) => {
         setloader(false);
         if (response.data.message == "success") {
-          // localStorage.setItem("userToken", response.data.token);
-          // setUserLogin(response.data.token);
-          navigate("/login");
+          if (isModal) {
+            setIsLoginTab(true);
+          } else {
+            navigate("/login");
+          }
         }
       })
       .catch((response) => {
         setloader(false);
-        setApiError(response.response.data.message);
+        setApiError(response.response?.data?.message || "An error occurred");
       });
   }
 
@@ -71,7 +73,7 @@ export default function Register() {
             <div className="loader"></div>{" "}
           </div>
         ) : null}
-        <h2>register now</h2>
+        <h2 className={isModal ? "d-none" : ""}>register now</h2>
         {ApiError == "" ? null : (
           <div className="alert alert-danger p-2 text-center" role="alert">
             {ApiError}

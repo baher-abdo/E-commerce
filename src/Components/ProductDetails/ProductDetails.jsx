@@ -5,9 +5,14 @@ import Slider from "react-slick";
 import { WishListContext } from "../../Context/WishListContext";
 import { CartContext } from "../../Context/CartContext";
 import toast from "react-hot-toast";
+import { UserContext } from "../../Context/UserContext";
+import { AuthModalContext } from "../../Context/AuthModalContext";
 
 export default function ProductDetails() {
   const [product, setproduct] = useState(null);
+  const { userLogin } = useContext(UserContext);
+  const { openModal } = useContext(AuthModalContext);
+
   let { addProductToCart, setCartItems, cartItems, getLoggedUserCart } =
     useContext(CartContext);
   let {
@@ -36,17 +41,20 @@ export default function ProductDetails() {
       .then((response) => {
         setproduct(response.data.data);
       })
-      .catch((response) => {
-      });
+      .catch((response) => {});
   }
   async function AddToWishList(id) {
+    if (!userLogin) {
+      openModal(() => AddToWishList(id));
+      return;
+    }
     let response = await AddProductToWishlist(id);
     if (response.data.status == "success") {
       setProductsInWishList(response.data.data);
-      toast.success(response.data.message,{
-        style: { backgroundColor:"#4b974be0",color:"#ffff",},
+      toast.success(response.data.message, {
+        style: { backgroundColor: "#4b974be0", color: "#ffff" },
         duration: 3000,
-      })
+      });
     }
   }
   async function removeFromWishList(id) {
@@ -54,16 +62,20 @@ export default function ProductDetails() {
     setProductsInWishList(response.data.data);
   }
   async function addToCart(id) {
+    if (!userLogin) {
+      openModal(() => addToCart(id));
+      return;
+    }
     setLoading(true);
     setCurentId(id);
 
     let response = await addProductToCart(id);
     if (response.data.status == "success") {
       setCartItems(response.data.numOfCartItems);
-      toast.success(response.data.message,{
-        style: { backgroundColor:"#4b974be0",color:"#ffff",},
+      toast.success(response.data.message, {
+        style: { backgroundColor: "#4b974be0", color: "#ffff" },
         duration: 3000,
-      })
+      });
       setLoading(false);
     } else {
       toast.error(response.data.message);
@@ -71,10 +83,12 @@ export default function ProductDetails() {
     }
   }
   useEffect(() => {
-    getLoggedUserCart();
-    GetLoggedUserWishlist();
+    if (userLogin) {
+      getLoggedUserCart();
+      GetLoggedUserWishlist();
+    }
     getProduct(id);
-  }, []);
+  }, [userLogin]);
 
   return (
     <>
